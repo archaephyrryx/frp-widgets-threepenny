@@ -1,39 +1,12 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
 module App.Widgets.MultiSelect where
 
-import Control.Applicative (Applicative)
-import Control.Concurrent.MVar
-import Control.Monad
-import Control.Monad.Fix
-import Control.Monad.IO.Class
-import Data.Dynamic
-import Data.Functor
-import Data.IORef
-import Data.Map (Map)
-import Data.Maybe (listToMaybe)
-import Data.String (fromString)
-import Data.IxSet
-import Data.List
-import Data.Data ( Data, Typeable)
-import Graphics.UI.Threepenny.Core
-import Graphics.UI.Threepenny.Internal.FFI
+import App.Widgets.Core
+import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
-import Data.Aeson (parseJSON, withArray, fromJSON, toJSON)
 import qualified Data.Map as Map
-import qualified Graphics.UI.Threepenny.Attributes as UI
-import qualified Graphics.UI.Threepenny.Elements   as UI
-import qualified Graphics.UI.Threepenny.Events     as UI
-import Graphics.UI.Threepenny.Events               (click,keydown)
-import qualified Graphics.UI.Threepenny.Core       as UI
 import qualified Data.Vector as V
-import Reactive.Threepenny
-import Reactive.Threepenny hiding (onChange)
-import Cards.Common.Hint
-import Cards.Common.Stringe
-import Cards.Common.Abbrev
-import Database
-import App.Core.Helper
 
 -- * MultiSelect * --
 -- |A customized version of ListBox that allows multiple elements to be

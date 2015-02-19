@@ -2,44 +2,23 @@
 
 module App.Widgets.RelNav where
 
-import Control.Applicative (Applicative)
-import Control.Concurrent.MVar
-import Control.Monad
-import Control.Monad.Fix
-import Control.Monad.IO.Class
-import Data.Dynamic
-import Data.Functor
-import Data.IORef
-import Data.Map (Map)
-import Data.Maybe (listToMaybe)
-import Data.String (fromString)
-import Data.IxSet
-import Data.List
-import Data.Data ( Data, Typeable)
-import Graphics.UI.Threepenny.Core
-import Graphics.UI.Threepenny.Internal.FFI
+import App.Widgets.Core
+import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
-import qualified Graphics.UI.Threepenny.Attributes as UI
-import qualified Graphics.UI.Threepenny.Elements   as UI
-import qualified Graphics.UI.Threepenny.Events     as UI
-import qualified Graphics.UI.Threepenny.Core       as UI
-import Reactive.Threepenny
-import Reactive.Threepenny hiding (onChange)
-import Cards.Common.Hint
-import Cards.Common.Stringe
-import Cards.Common.Abbrev
-import Database
-import App.Core.Helper
+import qualified Data.Vector as V
+import Data.List.Split
 import App.MicroScope
 
 -- | A 'Relative Navigator', which allows a user to navigate through a
--- long list of items, but displaying only the current and its
--- neighbors, as well as buttons to move around.
+-- long list of items, but displaying only a limited number of said
+-- items; integrates with a ViewMode, which should ideally be controlled
+-- by a Ranger
 data RelNav a = RelNav
   { _elementRN :: Element
   , _currentRN :: Tidings a
+  , _actuateRN :: Tidings Int
   }
 
 instance Widget (RelNav a) where getElement = _elementRN
@@ -48,12 +27,26 @@ userFocus :: RelNav a -> Tidings (MicroScope a)
 userFocus = _currentRN
 
 -- | Create a 'RelNav'.
-relNav ::
-    => Set a   -- ^ List of items
-    -> Behavior a   -- ^ selected item
-    -> Behavior (a -> UI Element) -- ^ display for an item
+relNav :: Ord a
+    => Behavior ([a]) -- ^ List of items
+    -> (Behavior Int, Behavior Int) -- ^ The current ViewMode, as a tuple of (npp, 0-indexed pn)
+    -> (a -> String) -- ^ How to name an item
+    -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ How to display an item
+    -> Behavior ([UI Element] -> UI Element) -- ^ How to aggregate the items
     -> UI (RelNav a)
-relNav glob bcur bdisplay = do
+relNav bGlobal (bScope, bSlide) namer bLinkShow bAggregate = do
+    microBox <- UI.div
+
+    let bChunks = chunksOf <$> bScope <*> bGlobal
+        bMicro = Tunneling <$> bChunks <*> bSlide
+        bFocus = focus <$> bMicro
+        bFirst = head <$> bFocus
+
+    bLinks <- sequence (zipWith (liquidLink) (namer.(!!) <$> bFocus <*>) [0..])
+
+    let eBlinks = map (rumors.tideLinks) bLinks
+
+    
     preb <- UI.div #. "relnav-item before"
     curb <- UI.div #. "relnav-item cur"
     folb <- UI.div #. "relnav-item after"

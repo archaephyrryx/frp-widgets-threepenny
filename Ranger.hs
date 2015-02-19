@@ -2,33 +2,12 @@
 
 module App.Widgets.Ranger where
 
-import Control.Applicative (Applicative)
-import Control.Concurrent.MVar
-import Control.Monad
-import Control.Monad.Fix
-import Control.Monad.IO.Class
-import Data.Dynamic
-import Data.Functor
-import Data.IORef
-import Data.Map (Map)
-import Data.Maybe (listToMaybe)
-import Data.String (fromString)
-import Data.IxSet
-import Data.List
-import Data.Data ( Data, Typeable)
-import Graphics.UI.Threepenny.Core
-import Graphics.UI.Threepenny.Internal.FFI
+import App.Widgets.Core
+import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
-import qualified Graphics.UI.Threepenny.Attributes as UI
-import qualified Graphics.UI.Threepenny.Elements   as UI
-import qualified Graphics.UI.Threepenny.Events     as UI
-import Graphics.UI.Threepenny.Events               (click,keydown)
-import qualified Graphics.UI.Threepenny.Core       as UI
-import Reactive.Threepenny
-import Reactive.Threepenny hiding (onChange)
-import App.Core.Helper
+import qualified Data.Vector as V
 
 -- | A 'Ranger', which consists of an incrementor and decrementor for a
 -- dynamic range and dynamic value within that range; works for any
