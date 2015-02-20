@@ -47,12 +47,12 @@ data LiquidLink a = LiquidLink
 
 instance Widget (LiquidLink a) where getElement = _elementLL
 
-liquidLink :: (a -> String) -- Value to display
+liquidLink :: Behavior (a -> String) -- Value to display
            -> Behavior a -- Value to hold
            -> UI (LiquidLink a)
-liquidLink fdval fluid = do
+liquidLink bdval fluid = do
     link <- button #. "liquidlink"
-    element link # sink text (fdval <$> fluid)
+    element link # sink text (bdval <*> fluid)
 
     let _elementLL = link
         _fluxLL = fluid

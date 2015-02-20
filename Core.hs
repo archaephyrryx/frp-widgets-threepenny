@@ -45,3 +45,6 @@ import Graphics.UI.Threepenny.Internal.FFI
 import Graphics.UI.Threepenny hiding (size, map, delete, empty)
 import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
+
+schildren = mkWriteAttr $ \i x -> void $ do
+    return x # set children [] #+ i
