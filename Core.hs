@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
 module App.Widgets.Core
-        ( module App.Widgets.Core
+        ( schildren
         , module App.Core.Helper
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets

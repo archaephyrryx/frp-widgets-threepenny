@@ -12,13 +12,13 @@ import Data.List.Split
 import App.MicroScope
 
 -- | A 'Relative Navigator', which allows a user to navigate through a
--- long list of items, but displaying only a limited number of said
--- items; integrates with a ViewMode, which should ideally be controlled
--- by a Ranger
+-- long list of items, but displaying only a certain number of items at
+-- a time, in a customizable way; this is tied indirectly to a ViewMode
+-- and Ranger
+
 data RelNav a = RelNav
   { _elementRN :: Element
-  , _currentRN :: Tidings a
-  , _actuateRN :: Tidings Int
+  , _currentRN :: Tidings (MicroScope a)
   }
 
 instance Widget (RelNav a) where getElement = _elementRN
@@ -27,14 +27,28 @@ userFocus :: RelNav a -> Tidings (MicroScope a)
 userFocus = _currentRN
 
 -- | Create a 'RelNav'.
-relNav :: Ord a
+relNav :: (Ord a, Widget b)
     => Behavior ([a]) -- ^ List of items
-    -> (Behavior Int, Behavior Int) -- ^ The current ViewMode, as a tuple of (npp, 0-indexed pn)
-    -> (a -> String) -- ^ How to name an item
-    -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ How to display an item
+    -> Behavior (Int, Int) -- ^ The dynamic ViewMode (npp, pn)
+    -> Ranger Int -- ^ The dynamic ViewMode
+    -> Behavior (a -> b -> UI Element) -- ^ How to display an item
     -> Behavior ([UI Element] -> UI Element) -- ^ How to aggregate the items
     -> UI (RelNav a)
-relNav bGlobal (bScope, bSlide) namer bLinkShow bAggregate = do
+relNav bGlobal bVMode bShower bAggregate = do
+    let
+        modeFlat = 0
+        modeList = 1
+        modeGrid = 2
+
+        modeType :: ViewMode -> Int
+        modeType FlatView{..} = modeFlat
+        modeType ListView{..} = modeList
+        modeType GridView{..} = modeGrid
+        
+        bModeType = modeType <$> bVMode
+        bNpp = npp <$> bVMode
+        bPageN = pn <$> bVMode
+
     microBox <- UI.div
 
     let bChunks = chunksOf <$> bScope <*> bGlobal

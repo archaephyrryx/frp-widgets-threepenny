@@ -22,6 +22,9 @@ instance Widget (SearchBar a) where getElement = _elementSB
 userSearch :: SearchBar a -> Tidings (String)
 userSearch = _searchsSB
 
+searchMatches :: SearchBar a -> Tidings ([a])
+searchMatches = _matchesSB
+
 searchBar :: (Ord a, Indexable a, Typeable a)
     => Behavior (IxSet a)         -- ^ list of items
     -> Behavior String            -- ^ partial search
