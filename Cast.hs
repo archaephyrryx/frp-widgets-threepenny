@@ -171,7 +171,12 @@ liquidCast bFull biteSize label fRower = do
     return Cask{..}
 
 
--- | Advanced Cask-builder that takes an external ranger as a parameter and allows FRP labels and FRP non-atomic row-transformers, but is otherwise identical to the standard liquidCast
+-- | Highly advanced Cask-builder that allows for a lot of
+--  customization. The Ranger is now passed in as an external parameter,
+--  labeling can be reactive, and the row-transformer has been replaced by
+--  two-function approach of population (making the 'rows') and wrangling
+--  (turning the 'rows' into something else, e.g. columns);
+--  otherwise behaves identically to the standard liquidCast function.
 derangedCask :: Behavior [a] -- ^ Full list
            -> Int -- ^ Number per page (cannot be FR)
            -> Ranger Int -- ^ External ranger
@@ -196,6 +201,44 @@ derangedCask bFull biteSize range bLabel bRower bCombo = do
         bValues = blTranspose biteSize (-1) ((!!) <$> bChunks <*> bThis)
 
     liquids <- sequence (zipWith liquidLink (replicate biteSize ((.) <$> bLabel <*> (((.abs).(!!)) <$> bFull))) bValues)
+    
+    let eLiquids = (map (rumors.tideLink) liquids)
+        eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
+
+    liquidBox <- UI.table
+    element liquidBox # sink schildren (($) <$> bCombo <*> (zipWith ($) <$> (map <$> bRower <*> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids))))
+
+    let _elementCK = liquidBox
+        _actuateCK = tidings (pure (-1)) $ eActua
+    return (Cask{..}, liquids)
+
+
+-- | Highly advanced Cask-builder that is like derangedCask, but uses
+-- obscurae instead of standard textlinks
+oculus :: Behavior [a] -- ^ Full list
+       -> Int -- ^ Number per page (cannot be FR)
+       -> Ranger Int -- ^ External ranger
+       -> Behavior (a -> String) -- ^ URL for the obscurae
+       -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ Row transformer for items
+       -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items 
+       -> UI (Cask, [LiquidLink Int])
+oculus bFull biteSize range bLinker bRower bCombo = do
+    let values = (map fst . zip [0..] <$> bFull)
+        bBits = length <$> values
+        bBites = ((`cdiv`biteSize) <$> bBits)
+        tRanger = userLoc range
+        eRanger = rumors tRanger
+        bRanger = facts tRanger
+        bFirst :: Behavior Int
+        bFirst = pure 0
+        bLast = pred <$> bBites
+    bThis <- stepper 0 $ eRanger
+
+    let
+        bChunks = chunksOf biteSize <$> values
+        bValues = blTranspose biteSize (-1) ((!!) <$> bChunks <*> bThis)
+
+    liquids <- sequence (zipWith obscura (replicate biteSize ((.) <$> bLinker <*> (((.abs).(!!)) <$> bFull))) bValues)
     
     let eLiquids = (map (rumors.tideLink) liquids)
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])

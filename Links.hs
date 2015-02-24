@@ -47,6 +47,14 @@ data LiquidLink a = LiquidLink
 
 instance Widget (LiquidLink a) where getElement = _elementLL
 
+getFlux :: LiquidLink a -> Behavior a
+getFlux = _fluxLL
+
+-- A type alias for convenience; takes display-function and internal
+-- value, returns liquidlink
+type LiquidLinker a = Behavior (a -> String) -> Behavior a -> UI (LiquidLink a)
+
+-- | The standard constructor for liquidlinks
 liquidLink :: Behavior (a -> String) -- Value to display
            -> Behavior a -- Value to hold
            -> UI (LiquidLink a)
@@ -58,8 +66,49 @@ liquidLink bdval fluid = do
         _fluxLL = fluid
     return LiquidLink{..}
 
-getFlux :: LiquidLink a -> Behavior a
-getFlux = _fluxLL
+-- Submerged definition
+{-
+liquidLink = submerge button "liquidlink" text
+-}
+
+
+-- * Obscura * --
+-- |Based on the idea of a camera obscura, a widget that acts like a
+-- liquidlink but displays an image instead of text; cameras have
+-- clickable buttons, and camera obscurae project varying external
+-- content onto a photographic plate, in this case a UI element.
+-- Otherwise does whatever a liquidlink does
+obscura :: Behavior (a -> String) -- Image URL to display
+        -> Behavior a -- Value to hold
+        -> UI (LiquidLink a)
+obscura bCurler fluid = do
+    link <- image #. "liquidlink obscura"
+    element link # sink src (bCurler <*> fluid)
+
+    let _elementLL = link
+        _fluxLL = fluid
+    return LiquidLink{..}
+
+-- Submerged definition
+{-
+obscura = submerge image "liquidlink obscura" src
+-}
+
+
+-- |An advanced, deep abstraction for liquidlinks, which is useful for
+-- creating new kinds of liquidLinks (such as Obscurae) but not for user
+-- invokation
+submerge :: UI Element -- ^ The element to use
+         -> String     -- ^ Class that element should have (customization)
+         -> WriteAttr Element String -- ^ String-based attribute to modify
+         -> LiquidLinker a
+submerge el cl att battr fluid = do
+    link <- el #. cl
+    element link # sink att (battr <*> fluid)
+
+    let _elementLL = link
+        _fluxLL = fluid
+    return LiquidLink{..}
 
 -- |An infix-able linking function that associates a LiquidLink to its
 -- dynamic value-computed action
