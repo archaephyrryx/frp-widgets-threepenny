@@ -66,35 +66,6 @@ liquidLink bdval fluid = do
         _fluxLL = fluid
     return LiquidLink{..}
 
--- Submerged definition
-{-
-liquidLink = submerge button "liquidlink" text
--}
-
-
--- * Obscura * --
--- |Based on the idea of a camera obscura, a widget that acts like a
--- liquidlink but displays an image instead of text; cameras have
--- clickable buttons, and camera obscurae project varying external
--- content onto a photographic plate, in this case a UI element.
--- Otherwise does whatever a liquidlink does
-obscura :: Behavior (a -> String) -- Image URL to display
-        -> Behavior a -- Value to hold
-        -> UI (LiquidLink a)
-obscura bCurler fluid = do
-    link <- image #. "liquidlink obscura"
-    element link # sink src (bCurler <*> fluid)
-
-    let _elementLL = link
-        _fluxLL = fluid
-    return LiquidLink{..}
-
--- Submerged definition
-{-
-obscura = submerge image "liquidlink obscura" src
--}
-
-
 -- |An advanced, deep abstraction for liquidlinks, which is useful for
 -- creating new kinds of liquidLinks (such as Obscurae) but not for user
 -- invokation

@@ -4,6 +4,7 @@ module App.Widgets.Cast where
 
 import App.Widgets.Core
 import App.Widgets.Links
+import App.Widgets.Obscura
 import App.Widgets.Ranger
 import App.Core.Helper
 import qualified Graphics.UI.Threepenny as UI
@@ -183,7 +184,7 @@ derangedCask :: Behavior [a] -- ^ Full list
            -> Behavior (a -> String) -- ^ Label for the liquidlinks
            -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ Row transformer for items
            -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items 
-           -> UI (Cask, [LiquidLink Int])
+           -> UI Cask
 derangedCask bFull biteSize range bLabel bRower bCombo = do
     let values = (map fst . zip [0..] <$> bFull)
         bBits = length <$> values
@@ -210,11 +211,12 @@ derangedCask bFull biteSize range bLabel bRower bCombo = do
 
     let _elementCK = liquidBox
         _actuateCK = tidings (pure (-1)) $ eActua
-    return (Cask{..}, liquids)
+    return Cask{..}
 
 
 -- | Highly advanced Cask-builder that is like derangedCask, but uses
--- obscurae instead of standard textlinks
+-- obscurae instead of standard textlinks, and returns its obscurae for
+-- custom processing
 oculus :: Behavior [a] -- ^ Full list
        -> Int -- ^ Number per page (cannot be FR)
        -> Ranger Int -- ^ External ranger
