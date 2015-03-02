@@ -1,6 +1,7 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-} --, NoMonomorphismRestriction #-}
 module App.Widgets.Core
         ( schildren
+        , silence
         , module App.Core.Helper
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets
@@ -48,3 +49,6 @@ import Reactive.Threepenny hiding (empty)
 
 schildren = mkWriteAttr $ \i x -> void $ do
     return x # set children [] #+ i
+
+silence :: Functor f => f a -> f ()
+silence = fmap (const ())
