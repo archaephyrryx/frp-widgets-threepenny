@@ -10,6 +10,8 @@ import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
 
+type MonoSelect a = MultiSelect a
+
 selectOnesChange :: Element -> Event [Int]
 selectOnesChange el = (maybeToList) <$> (selectionChange' el)
 
@@ -21,7 +23,7 @@ selectionChange' :: Element -> Event (Maybe Int)
 selectionChange' el = unsafeMapUI el (const $ get selection el) (head <$> unions [ click el, silence . domEvent "keydown" $ el ])
 
 monoSelectD   :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Element) -> UI Element -- ^ D: the default choice (with presets)
-              -> UI (MultiSelect a, Element)
+              -> UI (MonoSelect a, Element)
 
 monoSelectD bitems bsel bdisplay noChoice = do
     mono <- UI.select

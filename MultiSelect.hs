@@ -24,17 +24,15 @@ userSelections = _selectionMS
 
 -- | Create a 'MultiSelect'.
 multiSelect :: Ord a
-    => Behavior Bool  -- ^ Multiple or not
-    -> Behavior [a]   -- ^ list of items
+    => Behavior [a]   -- ^ list of items
     -> Behavior [a]   -- ^ selected items
     -> Behavior (a -> UI Element) -- ^ display for an item
     -> UI (MultiSelect a, Element)
-multiSelect bm bitems bsels bdisplay = do
-    multi <- UI.select
+multiSelect bitems bsels bdisplay = do
+    multi <- UI.select # set multiple True
     clearbut <- UI.button #. "clear-btn" # settext "clear"
 
     -- animate output items
-    element multi # sink UI.multiple bm
     element multi # sink items (map <$> bdisplay <*> bitems)
 
     -- animate output selection
