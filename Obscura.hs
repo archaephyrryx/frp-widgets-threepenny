@@ -20,17 +20,3 @@ obscura bCurler fluid = do
     let _elementLL = link
         _fluxLL = fluid
     return LiquidLink{..}
-
-ebbLink :: LiquidLink a -> Tidings a
-ebbLink ll = let b = (getFlux ll) in tidings b $ b <@ rclick (getElement ll)
-
-rclick :: Element -> Event ()
-rclick = silence . domEvent "contextmenu"
-
-forbidContext :: Attr Element ()
-forbidContext = fromJQueryContextForbid
-
-fromJQueryContextForbid :: Attr Element ()
-fromJQueryContextForbid = mkWriteAttr set
-    where
-    set _ el = runFunction $ ffi "$(%1).contextmenu( function() { return false; });" el

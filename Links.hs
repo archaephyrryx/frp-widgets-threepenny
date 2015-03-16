@@ -4,8 +4,20 @@ module App.Widgets.Links where
 import App.Core
 import App.Widgets.Core
 
+rclick :: Element -> Event ()
+rclick = silence . domEvent "contextmenu"
+
+forbidContext :: Attr Element ()
+forbidContext = fromJQueryContextForbid
+
+fromJQueryContextForbid :: Attr Element ()
+fromJQueryContextForbid = mkWriteAttr set
+    where
+    set _ el = runFunction $ ffi "$(%1).contextmenu( function() { return false; });" el
+
 class LinkLike w where
     tideLink :: w a -> Tidings a
+    ebbLink :: w a -> Tidings a
 
 -- * SoftLink * --
 -- |A hybrid Link/Button, which can be made into either with CSS rules.
@@ -25,7 +37,7 @@ softLink :: String -- Value to display
          -> a -- Value to hold
          -> UI (SoftLink a)
 softLink dval grist = do
-    link <- button #. "softlink" # set text dval
+    link <- button #. "softlink" # set text dval # set forbidContext ()
 
     let _elementSL = link
         _cruxSL = grist
@@ -59,7 +71,7 @@ liquidLink :: Behavior (a -> String) -- Value to display
            -> Behavior a -- Value to hold
            -> UI (LiquidLink a)
 liquidLink bdval fluid = do
-    link <- button #. "liquidlink"
+    link <- button #. "liquidlink" # set forbidContext ()
     element link # sink text (bdval <*> fluid)
 
     let _elementLL = link
@@ -90,6 +102,8 @@ ll`sinksTo`f = on click (getElement ll) $ \_ -> (f =<< (currentValue (getFlux $ 
 
 instance LinkLike SoftLink where
     tideLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ click (getElement sl)
+    ebbLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ rclick (getElement sl)
 
 instance LinkLike LiquidLink where
     tideLink ll = let b = (getFlux ll) in tidings b $ b <@ click (getElement ll)
+    ebbLink ll = let b = (getFlux ll) in tidings b $ b <@ rclick (getElement ll)
