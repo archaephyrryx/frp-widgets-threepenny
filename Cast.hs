@@ -68,7 +68,7 @@ softCast lFull bBiteSize label fRower = do
         eActua = head <$> unions (eSofts++[ (-1) <$ eRanger ])
 
     softBox <- UI.table
-    element softBox # sink schildren (zipWith ($) (map fRower lFull) <$> bSofts)
+    element softBox # sink (mapschildren (\(f,x) -> f $ x)) (zip (map fRower lFull) <$> bSofts)
 
     wrapper <- column [ row [element softBox ], row [element range] ]
 
@@ -106,7 +106,7 @@ liquidCast bFull biteSize label fRower = do
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 
     liquidBox <- UI.table
-    element liquidBox # sink schildren (zipWith ($) <$> (map fRower <$> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids)))
+    element liquidBox # sink (mapschildren (\(f,x) -> f $ x)) (zip <$> (map fRower <$> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids)))
     wrapper <- column [ row [ element liquidBox ], row [element range] ]
 
     let _elementCK = wrapper
@@ -143,7 +143,7 @@ derangedCask bFull biteSize range bLabel bRower bCombo = do
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 
     liquidBox <- UI.table
-    element liquidBox # sink schildren (($) <$> bCombo <*> (zipWith ($) <$> (map <$> bRower <*> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids))))
+    element liquidBox # sink (schildren (\(f,xs) -> f $ xs)) ((,) <$> bCombo <*> (zipWith ($) <$> (map <$> bRower <*> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids))))
 
     let _elementCK = liquidBox
         _actuateCK = tidings (pure (-1)) $ eActua
@@ -179,7 +179,7 @@ oculus bFull biteSize range bLinker bRower bCombo = do
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 
     liquidBox <- UI.table
-    element liquidBox # sink schildren (($) <$> bCombo <*> (zipWith ($) <$> (map <$> bRower <*> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids))))
+    element liquidBox # sink (schildren (\(f,xs) -> f $ xs)) ((,) <$> bCombo <*> (zipWith ($) <$> (map <$> bRower <*> ((!!) <$> (chunksOf biteSize <$> bFull) <*> bThis)) <*> (filtrate <$> (lbTranspose $ map (((>=0) <$>).getFlux) liquids) <*> (pure liquids))))
 
     let _elementCK = liquidBox
         _actuateCK = tidings (pure (-1)) $ eActua

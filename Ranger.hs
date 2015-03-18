@@ -31,9 +31,9 @@ ranger :: (Ord a, Enum a)
     -> UI (Ranger a)
 ranger bloc bzer bmax bdisplay = do
     prev <- UI.button #. "ranger-but prev" # settext "<"
-    cur <- UI.div #. "ranger-item cur"
+    cur <- UI.span #. "ranger-item cur"
     next <- UI.button #. "ranger-but next" # settext ">"
-    box <- UI.div #+ [element prev, element cur, element next]
+    box <- UI.span #+ [element prev, element cur, element next]
 
     let bNotFirst = (>) <$> bloc <*> bzer 
         bNotLast  = (<) <$> bloc <*> bmax 

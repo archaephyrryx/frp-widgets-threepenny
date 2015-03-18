@@ -22,12 +22,12 @@ selectOne = bimapAttr (listToMaybe) (maybeToList) selection
 selectionChange' :: Element -> Event (Maybe Int)
 selectionChange' el = unsafeMapUI el (const $ get selection el) (head <$> unions [ click el, silence . domEvent "keydown" $ el ])
 
-monoSelectD   :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Element) -> UI Element -- ^ D: the default choice (with presets)
+monoSelectD   :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Element) -> Element -- ^ D: the default choice (with presets)
               -> UI (MonoSelect a, Element)
 
 monoSelectD bitems bsel bdisplay noChoice = do
     mono <- UI.select
-    element mono # sink schildren ((noChoice:) <$> ((\pdisplay -> map (\x -> UI.option #+ [pdisplay x])) <$> bdisplay <*> bitems))
+    element mono # sink (mapschildren (either (return) (\(pdisplay,x) -> UI.option #+ [pdisplay x]))) (((Left noChoice):) <$> (zipWith ((Right .).(,)) <$> (repeat <$> bdisplay) <*> bitems))
     clearbut <- UI.button #. "clear-btn" # settext "clear"
 
     let bindices = indexify bitems
@@ -52,17 +52,17 @@ monoSelectIDC :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Elem
 monoSelectHDC :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Element) -> UI Element -- ^ HDC: the hidden default choice
               -> UI (MultiSelect a, Element)
 
-monoSelectVDC bitems bsel bdisplay pnull =
-    let noChoice = UI.option # set UI.selected True #+ [pnull]
-    in monoSelectD bitems bsel bdisplay noChoice
+monoSelectVDC bitems bsel bdisplay pnull = do
+    noChoice <- UI.option # set UI.selected True #+ [pnull]
+    monoSelectD bitems bsel bdisplay noChoice
 
-monoSelectIDC bitems bsel bdisplay pnull =
-    let noChoice = UI.option # set UI.selected True # set UI.enabled False #+ [pnull]
-    in monoSelectD bitems bsel bdisplay noChoice
+monoSelectIDC bitems bsel bdisplay pnull = do
+    noChoice <- UI.option # set UI.selected True # set UI.enabled False #+ [pnull]
+    monoSelectD bitems bsel bdisplay noChoice
 
-monoSelectHDC bitems bsel bdisplay pnull =
-    let noChoice = UI.option # set UI.selected True # set UI.enabled False # set style [("display","none")] #+ [pnull]
-    in monoSelectD bitems bsel bdisplay noChoice
+monoSelectHDC bitems bsel bdisplay pnull = do
+    noChoice <- UI.option # set UI.selected True # set UI.enabled False # set style [("display","none")] #+ [pnull]
+    monoSelectD bitems bsel bdisplay noChoice
 
 -- | Monoselect with Strict Valid Choices
 monoSelectSVC :: Ord a

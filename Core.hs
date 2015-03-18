@@ -1,6 +1,7 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-} --, NoMonomorphismRestriction #-}
 module App.Widgets.Core
         ( schildren
+        , mapschildren
         , silence
         , module App.Core.Helper
         , module Graphics.UI.Threepenny.Core
@@ -47,8 +48,13 @@ import Graphics.UI.Threepenny hiding (size, map, delete, empty)
 import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
 
-schildren = mkWriteAttr $ \i x -> void $ do
-    return x # set children [] #+ i
+schildren :: (a -> [UI Element]) -> WriteAttr Element a
+schildren f = mkWriteAttr $ \i x -> void $ do
+    return x # set children [] #+ (f i)
+
+mapschildren :: (a -> UI Element) -> WriteAttr Element [a]
+mapschildren f = mkWriteAttr $ \i x -> void $ do
+    return x # set children [] #+ (map f i)
 
 silence :: Functor f => f a -> f ()
 silence = fmap (const ())

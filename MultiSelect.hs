@@ -60,9 +60,6 @@ multiSelect bitems bsels bdisplay = do
 selectionsChange :: Element -> Event [Int]
 selectionsChange el = unsafeMapUI el (const $ get selections el) (click el)
 
-selClear :: Element -> Event [Int]
-selClear el = unsafeMapUI el (const $ return []) (UI.click el)
-
 unsafeMapUI el f = unsafeMapIO (\a -> getWindow el >>= \w -> runUI w (f a))
 
 items = mkWriteAttr $ \i x -> void $ do
@@ -76,5 +73,13 @@ selections = fromJQuerySelectedIndices from (JSON.toJSON)
 fromJQuerySelectedIndices :: (JSON.Value -> [Int]) -> ([Int] -> JSON.Value) -> Attr Element [Int]
 fromJQuerySelectedIndices from to = mkReadWriteAttr get set
     where
-    set v el = runFunction $ ffi "$(%1).val( (%2).map(function(x) { return $.makeArray($(%3).find('option').map(function() { return $(this).val(); }))[x]))" el (to v) el
-    get   el = fmap from $ callFunction $ ffi "$(%1).val().map(function(x) { return $.inArray(x, $.makeArray($(%2).find('option').map(function() { return $(this).val(); }))); }) || []" el el
+    set v el = runFunction $ ffi "$(%1).val( (%2).map(function(x) { return $.makeArray($(%1).find('option').map(function() { return $(this).val(); }))[x]))" el (to v)
+    get   el = fmap from $ callFunction $ ffi "$(%1).val().map(function(x) { return $.inArray(x, $.makeArray($(%1).find('option').map(function() { return $(this).val(); }))); }) || []" el
+
+clearSels :: Attr Element ()
+clearSels = fromJQueryClearSel
+
+fromJQueryClearSel :: Attr Element ()
+fromJQueryClearSel = mkWriteAttr set
+    where
+      set _ el = runFunction $ ffi "$(%1).find('option:selected').removeAttr('selected')" el
