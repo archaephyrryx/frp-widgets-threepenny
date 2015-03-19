@@ -8,6 +8,9 @@ import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
 
+clickValueChange :: Element -> Event String
+clickValueChange el = unsafeMapUI el (const $ get value el) (mouseKey el)
+
 -- * Min and Max * --
 -- |A "minimum value" numeric input field
 data Min a = Min
@@ -41,11 +44,11 @@ minmax bmin bmax bdisplay = do
 
     -- animate output items
     element mini  # sink value ((maybe ("")) <$> bdisplay <*> bmin)
-    element maxi  # sink (attr "min") ((maybe ("")) <$> bdisplay <*> bmin)
+    element maxi  # sink (attr "min") ((maybe ("0")) <$> bdisplay <*> bmin)
     element maxi  # sink value ((maybe ("")) <$> bdisplay <*> bmax)
 
-    let _nuMN = tidings bmin $ readMaybeH <$> UI.valueChange mini
+    let _nuMN = tidings bmin $ readMaybeH <$> clickValueChange mini
         _elementMN   = mini
-        _nuMX = tidings bmax $ readMaybeH <$> UI.valueChange maxi
+        _nuMX = tidings bmax $ readMaybeH <$> clickValueChange maxi
         _elementMX   = maxi
     return (Min{..}, Max{..})

@@ -9,25 +9,29 @@ import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
+import Util
 
 type MonoSelect a = MultiSelect a
 
 selectOnesChange :: Element -> Event [Int]
-selectOnesChange el = (maybeToList) <$> (selectionChange' el)
+selectOnesChange el = maybeToList <$> selectionChange' el
 
 selectOne :: Attr Element [Int]
 selectOne = bimapAttr (listToMaybe) (maybeToList) selection
 
 -- | A custom event generator that responds to clicks AND keypresses
 selectionChange' :: Element -> Event (Maybe Int)
-selectionChange' el = unsafeMapUI el (const $ get selection el) (head <$> unions [ click el, silence . domEvent "keydown" $ el ])
+selectionChange' el = unsafeMapUI el (const $ get selection el) (mouseKey el)
 
-monoSelectD   :: Ord a => Behavior [a] -> Behavior [a] -> Behavior (a -> UI Element) -> Element -- ^ D: the default choice (with presets)
-              -> UI (MonoSelect a, Element)
+monoSelectD   :: Ord a => Behavior [a] -- ^ List of values
+                       -> Behavior [a] -- ^ Selected value (singleton or empty)
+                       -> Behavior (a -> UI Element) -- ^ Display for regular values
+                       -> Element -- ^ D: the default choice (with presets)
+                       -> UI (MonoSelect a, Element) -- ^ Widget and clearbutton
 
 monoSelectD bitems bsel bdisplay noChoice = do
     mono <- UI.select
-    element mono # sink (mapschildren (either (return) (\(pdisplay,x) -> UI.option #+ [pdisplay x]))) (((Left noChoice):) <$> (zipWith ((Right .).(,)) <$> (repeat <$> bdisplay) <*> bitems))
+    element mono # sink (mapkinder $ either return ((UI.option #+).once zap)) ((Left noChoice:) <$> ((map Right.).zip <$> (repeat <$> bdisplay) <*> bitems))
     clearbut <- UI.button #. "clear-btn" # settext "clear"
 
     let bindices = indexify bitems

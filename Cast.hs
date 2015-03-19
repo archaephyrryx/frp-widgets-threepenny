@@ -7,6 +7,7 @@ import App.Widgets.Links
 import App.Widgets.Obscura
 import App.Widgets.Ranger
 import App.Core.Helper
+import Util.Helper
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON

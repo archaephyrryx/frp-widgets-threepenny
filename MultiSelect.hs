@@ -60,8 +60,6 @@ multiSelect bitems bsels bdisplay = do
 selectionsChange :: Element -> Event [Int]
 selectionsChange el = unsafeMapUI el (const $ get selections el) (click el)
 
-unsafeMapUI el f = unsafeMapIO (\a -> getWindow el >>= \w -> runUI w (f a))
-
 items = mkWriteAttr $ \i x -> void $ do
     return x # set children [] #+ map (\i -> UI.option #+ [i]) i
 

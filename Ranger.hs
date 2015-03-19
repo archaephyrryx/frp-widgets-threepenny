@@ -4,10 +4,6 @@ module App.Widgets.Ranger where
 
 import App.Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
-import qualified Control.Monad.Trans.RWS.Lazy as Monad
-import qualified Data.Aeson as JSON
-import qualified Data.Map as Map
-import qualified Data.Vector as V
 
 -- | A 'Ranger', which consists of an incrementor and decrementor for a
 -- dynamic range and dynamic value within that range; works for any

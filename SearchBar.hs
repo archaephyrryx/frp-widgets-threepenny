@@ -4,10 +4,6 @@ module App.Widgets.SearchBar where
 
 import App.Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
-import qualified Control.Monad.Trans.RWS.Lazy as Monad
-import qualified Data.Aeson as JSON
-import qualified Data.Map as Map
-import qualified Data.Vector as V
 
 -- * SearchBar * --
 -- |A search-bar that performs auto-completed lookups into an IxSet

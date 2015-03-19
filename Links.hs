@@ -16,8 +16,11 @@ fromJQueryContextForbid = mkWriteAttr set
     set _ el = runFunction $ ffi "$(%1).contextmenu( function() { return false; });" el
 
 class LinkLike w where
-    tideLink :: w a -> Tidings a
-    ebbLink :: w a -> Tidings a
+    tideLink :: w a -> Tidings a -- ^ Tidings for normal clicks
+    ebbLink :: w a -> Tidings a -- ^ Tidings for right-clicks
+
+
+
 
 -- * SoftLink * --
 -- |A hybrid Link/Button, which can be made into either with CSS rules.
@@ -32,6 +35,10 @@ data SoftLink a = SoftLink
   }
 
 instance Widget (SoftLink a) where getElement = _elementSL
+
+instance LinkLike SoftLink where
+    tideLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ click (getElement sl)
+    ebbLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ rclick (getElement sl)
 
 softLink :: String -- Value to display
          -> a -- Value to hold
@@ -51,13 +58,25 @@ getCrux = _cruxSL
 linksTo :: SoftLink a -> (a -> UI ()) -> UI ()
 sl`linksTo`f = on click (getElement sl) $ \_ -> f (getCrux sl)
 
+
+
+
+
+
+
+
+
 -- | Mutable-content softlink
 data LiquidLink a = LiquidLink
   { _elementLL :: Element
   , _fluxLL :: Behavior a
   }
 
-instance Widget (LiquidLink a) where getElement = _elementLL
+instance Widget (LiquidLink a) where getElement = _elementLL 
+
+instance LinkLike LiquidLink where
+    tideLink ll = let b = (getFlux ll) in tidings b $ b <@ click (getElement ll)
+    ebbLink ll = let b = (getFlux ll) in tidings b $ b <@ rclick (getElement ll)
 
 getFlux :: LiquidLink a -> Behavior a
 getFlux = _fluxLL
@@ -80,7 +99,7 @@ liquidLink bdval fluid = do
 
 -- |An advanced, deep abstraction for liquidlinks, which is useful for
 -- creating new kinds of liquidLinks (such as Obscurae) but not for user
--- invokation
+-- invocation
 submerge :: UI Element -- ^ The element to use
          -> String     -- ^ Class that element should have (customization)
          -> WriteAttr Element String -- ^ String-based attribute to modify
@@ -98,12 +117,3 @@ submerge el cl att battr fluid = do
 sinksTo :: LiquidLink a -> (a -> UI ()) -> UI ()
 ll`sinksTo`f = on click (getElement ll) $ \_ -> (f =<< (currentValue (getFlux $ ll)))
 
--- |Link tidings: constant on click, changes with crux/flux
-
-instance LinkLike SoftLink where
-    tideLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ click (getElement sl)
-    ebbLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ rclick (getElement sl)
-
-instance LinkLike LiquidLink where
-    tideLink ll = let b = (getFlux ll) in tidings b $ b <@ click (getElement ll)
-    ebbLink ll = let b = (getFlux ll) in tidings b $ b <@ rclick (getElement ll)

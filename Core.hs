@@ -1,8 +1,10 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-} --, NoMonomorphismRestriction #-}
 module App.Widgets.Core
-        ( schildren
-        , mapschildren
+        ( kinder
+        , mapkinder
         , silence
+        , mousekey
+        , unsafeMapUI
         , module App.Core.Helper
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets
@@ -42,19 +44,30 @@ import Data.Map (Map)
 import Data.Maybe
 import Data.String (fromString)
 import Graphics.UI.Threepenny.Core hiding (empty, delete)
-import Graphics.UI.Threepenny.Events (click,keydown)
+import Graphics.UI.Threepenny.Events
 import Graphics.UI.Threepenny.Internal.FFI
 import Graphics.UI.Threepenny hiding (size, map, delete, empty)
 import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
 
-schildren :: (a -> [UI Element]) -> WriteAttr Element a
-schildren f = mkWriteAttr $ \i x -> void $ do
-    return x # set children [] #+ (f i)
-
-mapschildren :: (a -> UI Element) -> WriteAttr Element [a]
-mapschildren f = mkWriteAttr $ \i x -> void $ do
-    return x # set children [] #+ (map f i)
-
 silence :: Functor f => f a -> f ()
 silence = fmap (const ())
+
+unsafeMapUI el f = unsafeMapIO (\a -> getWindow el >>= \w -> runUI w (f a))
+
+-- | Attribute generator with highly general type polymorphism
+kinder :: (a -> [UI Element]) -> WriteAttr Element a
+kinder f = mkWriteAttr $ \i x -> void $ do
+    return x # set children [] #+ (f i)
+
+-- | Attribute generator for display functions that are mapping in
+-- nature
+mapkinder :: (a -> UI Element) -> WriteAttr Element [a]
+mapkinder f = mkWriteAttr $ \i x -> void $ do
+    return x # set children [] #+ (map f i)
+
+-- | An event representing either a 'keydown' event or a 'click' event,
+-- for widgets that can change values through either action; in the case
+-- of keydown, the value is recorded
+mouseKey :: Element -> Event (Maybe KeyCode) -- ^ (Maybe a) is isomorphic to (Either () a), and it is simpler
+mouseKey el = head <$> unions [ Nothing <$ click el, Just <$> keydown el ]
