@@ -3,18 +3,18 @@ module App.Widgets.Core
         ( kinder
         , mapkinder
         , silence
-        , mousekey
+        , mouseKey
         , unsafeMapUI
         , module App.Core.Helper
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets
-        , module Cards.Common.Instances
+        , module CCG.Cards.Common.Instances
         , module Control.Applicative
         , module Control.Concurrent.MVar
         , module Control.Monad
         , module Control.Monad.Fix
         , module Control.Monad.IO.Class
-        , module Database
+        , module API.Database
         , module Data.Data
         , module Data.Dynamic
         , module Data.Functor
@@ -28,13 +28,13 @@ module App.Widgets.Core
         ) where
 
 import App.Core.Helper
-import Cards.Common.Instances
+import CCG.Cards.Common.Instances
 import Control.Applicative hiding (empty)
 import Control.Concurrent.MVar
 import Control.Monad
 import Control.Monad.Fix
 import Control.Monad.IO.Class
-import Database
+import API.Database
 import Data.Data (Data, Typeable)
 import Data.Dynamic
 import Data.Functor
