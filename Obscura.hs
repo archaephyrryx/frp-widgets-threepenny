@@ -1,4 +1,4 @@
-{-# LANGUAGE DoRec, RecordWildCards #-}
+{-# LANGUAGE RecursiveDo, RecordWildCards #-}
 
 module App.Widgets.Obscura where
 

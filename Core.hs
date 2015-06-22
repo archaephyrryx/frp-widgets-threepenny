@@ -38,14 +38,13 @@ import API.Database
 import Data.Data (Data, Typeable)
 import Data.Dynamic
 import Data.Functor
-import Data.IxSet
+import Data.IxSet hiding (Proxy)
 import Data.List hiding (span, drop, delete, union, insert, groupBy, null)
 import Data.Map (Map)
 import Data.Maybe
 import Data.String (fromString)
 import Graphics.UI.Threepenny.Core hiding (empty, delete)
 import Graphics.UI.Threepenny.Events
-import Graphics.UI.Threepenny.Internal.FFI
 import Graphics.UI.Threepenny hiding (size, map, delete, empty)
 import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
