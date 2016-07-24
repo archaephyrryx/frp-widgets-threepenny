@@ -9,7 +9,7 @@ import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
-import Util
+import Util hiding (get)
 
 type MonoSelect a = MultiSelect a
 
@@ -31,7 +31,7 @@ monoSelectD   :: Ord a => Behavior [a] -- ^ List of values
 
 monoSelectD bitems bsel bdisplay noChoice = do
     mono <- UI.select
-    element mono # sink (mapkinder $ either return ((UI.option #+).once zap)) ((Left noChoice:) <$> ((map Right.).zip <$> (repeat <$> bdisplay) <*> bitems))
+    element mono # sink (mapkinder $ either return ((UI.option #+).once act)) ((Left noChoice:) <$> ((map Right.).zip <$> (repeat <$> bdisplay) <*> bitems))
     clearbut <- UI.button #. "clear-btn" # settext "clear"
 
     let bindices = indexify bitems
@@ -70,7 +70,7 @@ monoSelectHDC bitems bsel bdisplay pnull = do
 
 -- | Monoselect with Strict Valid Choices
 monoSelectSVC :: Ord a
-              => Behavior [a]  -- ^ list of items 
+              => Behavior [a]  -- ^ list of items
               -> Behavior [a]  -- ^ selected items
               -> Behavior (a -> UI Element) -- ^ display for an item
               -> UI (MultiSelect a, Element)
