@@ -1,4 +1,4 @@
-module Widgets.Threepenny.Core.Helper where
+module Widgets.Threepenny.Core.UI where
 
 import Graphics.UI.Threepenny.Core
 import Graphics.UI.Threepenny.Elements

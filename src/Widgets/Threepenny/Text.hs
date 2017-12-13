@@ -2,8 +2,8 @@
 module Widgets.Threepenny.Text where
 
 import Widgets.Threepenny.Core
+import qualified Widgets.Threepenny.Core as UI
 import Util hiding (Visible, visible)
-import Reactive.ValText
 import Control.Monad
 
 data RText = RText { _elemRT :: Element

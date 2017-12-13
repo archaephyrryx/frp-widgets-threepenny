@@ -40,7 +40,8 @@ library
       Widgets.Threepenny
       Widgets.Threepenny.Cast
       Widgets.Threepenny.Core
-      Widgets.Threepenny.Core.Helper
+      Widgets.Threepenny.Core.FRP
+      Widgets.Threepenny.Core.UI
       Widgets.Threepenny.Counter
       Widgets.Threepenny.Links
       Widgets.Threepenny.MinMax

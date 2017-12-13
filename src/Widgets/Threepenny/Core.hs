@@ -5,7 +5,8 @@ module Widgets.Threepenny.Core
         , silence
         , mouseKey
         , unsafeMapUI
-        , module Widgets.Threepenny.Core.Helper
+        , module Widgets.Threepenny.Core.UI
+        , module Widgets.Threepenny.Core.FRP
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets
         , module Control.Applicative
@@ -25,7 +26,8 @@ module Widgets.Threepenny.Core
         , module Reactive.Threepenny
         ) where
 
-import Widgets.Threepenny.Core.Helper
+import Widgets.Threepenny.Core.UI
+import Widgets.Threepenny.Core.FRP
 import Control.Applicative hiding (empty)
 import Control.Concurrent.MVar
 import Control.Monad
