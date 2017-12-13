@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards       #-}
-module Widgets.Banana.Text where
+module Widgets.Threepenny.Text where
 
-import Widgets.Banana.Core
+import Widgets.Threepenny.Core
 import Util hiding (Visible, visible)
 import Reactive.ValText
 import Control.Monad

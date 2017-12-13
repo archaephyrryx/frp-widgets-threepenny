@@ -4,16 +4,16 @@
 {-# LANGUAGE RecordWildCards       #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeSynonymInstances  #-}
-module Widgets.Banana.Recorder where
+module Widgets.Threepenny.Recorder where
 
-import Widgets.Banana.Core
+import Widgets.Threepenny.Core
 import Util hiding (Visible, visible)
 import Control.Monad
-import Widgets.Banana.Input
-import Widgets.Banana.Text
-import Widgets.Banana.Table
-import Widgets.Banana.Fields
-import Widgets.Banana.Links
+import Widgets.Threepenny.Input
+import Widgets.Threepenny.Text
+import Widgets.Threepenny.Table
+import Widgets.Threepenny.Fields
+import Widgets.Threepenny.Links
 
 data Recorder = Recorder { _elementRE :: Element
                          , _fileioRE :: Tidings String

@@ -1,9 +1,9 @@
 {-# LANGUAGE RecordWildCards        #-}
-module Widgets.Banana.Radio where
+module Widgets.Threepenny.Radio where
 
-import Widgets.Banana.Links
-import Widgets.Banana.Table
-import Widgets.Banana.Core
+import Widgets.Threepenny.Links
+import Widgets.Threepenny.Table
+import Widgets.Threepenny.Core
 import Control.Monad (forM_, forM)
 
 data Radio a = Radio { _elementRD :: Element

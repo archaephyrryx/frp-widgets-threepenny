@@ -108,4 +108,4 @@ ll`sinksTo`f = on click (getElement ll) $ const (f =<< currentValue (getFlux ll)
 
 -- This is unsafe and should be used sparingly
 triggerEvent :: LinkLike w => w a -> (a -> IO b) -> Event b
-triggerEvent l f = unsafeMapIO f $ rumors . tideLink $ f
+triggerEvent l f = unsafeMapIO f $ rumors . tideLink $ l

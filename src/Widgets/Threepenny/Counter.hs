@@ -43,7 +43,7 @@ counter :: (Ord a, Enum a)
         -> UI (Counter a)
 counter val = do
   fc <- incre
-  counter' incre succ val (pure Nothing)
+  counter' fc succ val (pure Nothing)
 
 
 -- | Customizeable counter when using non-standard increments or imposing max value
@@ -58,9 +58,9 @@ counter' control step bVal sdMax = do
 
   let bUnder  = (maybe True . (<)) <$> bVal <*> sdMax
 
-  inc # sink UI.enabled bUnder
+  element inc # sink UI.enabled bUnder
 
-  let eInc = Click inc
+  let eInc = click inc
 
   let eDelta = step <$ whenE bUnder eInc
       eChange = (#) <$> bVal <@> eDelta

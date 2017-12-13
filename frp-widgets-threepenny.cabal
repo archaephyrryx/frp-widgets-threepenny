@@ -37,15 +37,20 @@ library
     , aeson >= 1.1
     , vector >= 0.12
   exposed-modules:
-      Widgets.Cast
-      Widgets.Core
-      Widgets.Core.Helper
-      Widgets.Links
-      Widgets.MinMax
-      Widgets.MonoSelect
-      Widgets.MultiSelect
-      Widgets.Obscura
-      Widgets.Ranger
-      Widgets.SearchBar
       Widgets.Threepenny
+      Widgets.Threepenny.Cast
+      Widgets.Threepenny.Core
+      Widgets.Threepenny.Core.Helper
+      Widgets.Threepenny.Counter
+      Widgets.Threepenny.Links
+      Widgets.Threepenny.MinMax
+      Widgets.Threepenny.MonoSelect
+      Widgets.Threepenny.MultiSelect
+      Widgets.Threepenny.Obscura
+      Widgets.Threepenny.Phantom
+      Widgets.Threepenny.Radio
+      Widgets.Threepenny.Ranger
+      Widgets.Threepenny.Recorder
+      Widgets.Threepenny.SearchBar
+      Widgets.Threepenny.Text
   default-language: Haskell2010
