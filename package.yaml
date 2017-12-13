@@ -1,0 +1,34 @@
+name:                frp-widgets-threepenny
+version:             0.1.0.0
+github:              archaephyrryx/frp-widgets-threepenny
+license:             BSD3
+author:              Peter Duchovni
+maintainer:          caufeminecraft+github@gmail.com
+copyright:           2017 Peter Duchovni
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+synopsis:            Custom widget library for threepenny-gui
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on Github at <https://github.com/githubuser/frp-widgets-threepenny#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+  - futility >= 0.1
+  - split >=0.2
+  - transformers >=0.5
+  - containers >=0.5
+  - threepenny-gui >= 0.8
+  - ixset >= 1.0
+  - aeson >= 1.1
+  - vector >= 0.12
+
+library:
+  source-dirs: src/
