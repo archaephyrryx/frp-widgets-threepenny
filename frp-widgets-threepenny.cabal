@@ -25,7 +25,8 @@ library
     Widgets.SearchBar,
     Widgets.Obscura,
     Widgets.MinMax,
-    Widgets.Core
+    Widgets.Core,
+    Widgets.Threepenny
   other-modules:
     Widgets.Core.Helper
   other-extensions:
