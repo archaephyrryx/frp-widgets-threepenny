@@ -6,8 +6,6 @@ module Widgets.Threepenny.Phantom where
 import Widgets.Threepenny.Core
 import Control.Monad (forM_, sequence_, forM, void)
 import Util ((.=), only)
-import Data.Array
-import Data.Function (on)
 
 -- | A widget class for one possible contents of a static frame. `Edifice` defines contents that are
 -- visible whenever they are in focus, while `Artifice` defines contents that may be invisible even
