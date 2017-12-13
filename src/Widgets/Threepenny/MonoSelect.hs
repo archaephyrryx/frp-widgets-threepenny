@@ -3,7 +3,6 @@ module Widgets.Threepenny.MonoSelect where
 
 import Widgets.Threepenny.MultiSelect
 import Widgets.Threepenny.Core
-import Widgets.Threepenny.Core.Helper
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
@@ -17,7 +16,7 @@ selectOnesChange :: Element -> Event [Int]
 selectOnesChange el = maybeToList <$> selectionChange' el
 
 selectOne :: Attr Element [Int]
-selectOne = bimapAttr (listToMaybe) (maybeToList) selection
+selectOne = bimapAttr listToMaybe maybeToList selection
 
 -- | A custom event generator that responds to clicks AND keypresses
 selectionChange' :: Element -> Event (Maybe Int)
@@ -45,7 +44,7 @@ monoSelectD bitems bsel bdisplay noChoice = do
 
     let bindices2 = Map.fromList . zip [1..] <$> bitems
         _selectionMS = tidings bsel $
-            lookupIndex <$> bindices2 <@> (selectOnesChange mono)
+            lookupIndex <$> bindices2 <@> selectOnesChange mono
         _elementMS   = mono
     return (MultiSelect{..}, clearbut)
 
@@ -92,6 +91,6 @@ monoSelectSVC bitems bsel bdisplay = do
     -- user selection
     let bindices2 = Map.fromList . zip [0..] <$> bitems
         _selectionMS = tidings bsel $
-            lookupIndex <$> bindices2 <@> (selectOnesChange mono)
+            lookupIndex <$> bindices2 <@> selectOnesChange mono
         _elementMS   = mono
     return (MultiSelect{..}, clearbut)

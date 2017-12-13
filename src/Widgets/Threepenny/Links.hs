@@ -19,8 +19,6 @@ class LinkLike w where
     ebbLink :: w a -> Tidings a -- ^ Tidings for right-clicks
 
 
-
-
 -- * SoftLink * --
 -- |A hybrid Link/Button, which can be made into either with CSS rules.
 --  The SoftLink stores a single value, which can be hooked to a
@@ -36,8 +34,8 @@ data SoftLink a = SoftLink
 instance Widget (SoftLink a) where getElement = _elementSL
 
 instance LinkLike SoftLink where
-    tideLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ click (getElement sl)
-    ebbLink sl = let b = (pure (getCrux sl)) in tidings b $ b <@ rclick (getElement sl)
+    tideLink sl = let b = pure (getCrux sl) in tidings b $ b <@ click (getElement sl)
+    ebbLink sl = let b = pure (getCrux sl) in tidings b $ b <@ rclick (getElement sl)
 
 softLink :: String -- Value to display
          -> a -- Value to hold
@@ -57,14 +55,6 @@ getCrux = _cruxSL
 linksTo :: SoftLink a -> (a -> UI ()) -> UI ()
 sl`linksTo`f = on click (getElement sl) $ \_ -> f (getCrux sl)
 
-
-
-
-
-
-
-
-
 -- | Mutable-content softlink
 data LiquidLink a = LiquidLink
   { _elementLL :: Element
@@ -74,8 +64,8 @@ data LiquidLink a = LiquidLink
 instance Widget (LiquidLink a) where getElement = _elementLL
 
 instance LinkLike LiquidLink where
-    tideLink ll = let b = (getFlux ll) in tidings b $ b <@ click (getElement ll)
-    ebbLink ll = let b = (getFlux ll) in tidings b $ b <@ rclick (getElement ll)
+    tideLink ll = let b = getFlux ll in tidings b $ b <@ click (getElement ll)
+    ebbLink ll = let b = getFlux ll in tidings b $ b <@ rclick (getElement ll)
 
 getFlux :: LiquidLink a -> Behavior a
 getFlux = _fluxLL
@@ -114,5 +104,8 @@ submerge el cl att battr fluid = do
 -- |An infix-able linking function that associates a LiquidLink to its
 -- dynamic value-computed action
 sinksTo :: LiquidLink a -> (a -> UI ()) -> UI ()
-ll`sinksTo`f = on click (getElement ll) $ \_ -> (f =<< (currentValue (getFlux $ ll)))
+ll`sinksTo`f = on click (getElement ll) $ const (f =<< currentValue (getFlux ll))
 
+-- This is unsafe and should be used sparingly
+triggerEvent :: LinkLike w => w a -> (a -> IO b) -> Event b
+triggerEvent l f = unsafeMapIO f $ rumors . tideLink $ f
