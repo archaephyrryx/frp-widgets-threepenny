@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
-module Widgets.Links where
+module Widgets.Threepenny.Links where
 
-import Widgets.Core
+import Widgets.Threepenny.Core
 
 rclick :: Element -> Event ()
 rclick = silence . domEvent "contextmenu"

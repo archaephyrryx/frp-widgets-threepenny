@@ -1,8 +1,8 @@
 {-# LANGUAGE RecordWildCards, RecursiveDo #-}
 
-module Widgets.Ranger where
+module Widgets.Threepenny.Ranger where
 
-import Widgets.Core
+import Widgets.Threepenny.Core
 import qualified Graphics.UI.Threepenny as UI
 
 -- | A 'Ranger', which consists of an incrementor and decrementor for a

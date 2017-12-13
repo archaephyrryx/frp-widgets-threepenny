@@ -1,9 +1,9 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
-module Widgets.MonoSelect where
+module Widgets.Threepenny.MonoSelect where
 
-import Widgets.MultiSelect
-import Widgets.Core
-import Widgets.Core.Helper
+import Widgets.Threepenny.MultiSelect
+import Widgets.Threepenny.Core
+import Widgets.Threepenny.Core.Helper
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON

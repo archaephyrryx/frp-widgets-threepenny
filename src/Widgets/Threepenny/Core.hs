@@ -1,11 +1,11 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-} --, NoMonomorphismRestriction #-}
-module Widgets.Core
+module Widgets.Threepenny.Core
         ( kinder
         , mapkinder
         , silence
         , mouseKey
         , unsafeMapUI
-        , module Widgets.Core.Helper
+        , module Widgets.Threepenny.Core.Helper
         , module Graphics.UI.Threepenny.Core
         , module Graphics.UI.Threepenny.Widgets
         , module Control.Applicative
@@ -25,7 +25,7 @@ module Widgets.Core
         , module Reactive.Threepenny
         ) where
 
-import Widgets.Core.Helper
+import Widgets.Threepenny.Core.Helper
 import Control.Applicative hiding (empty)
 import Control.Concurrent.MVar
 import Control.Monad

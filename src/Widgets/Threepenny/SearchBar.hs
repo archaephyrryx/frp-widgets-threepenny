@@ -1,8 +1,8 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Widgets.SearchBar where
+module Widgets.Threepenny.SearchBar where
 
-import Widgets.Core
+import Widgets.Threepenny.Core
 import qualified Graphics.UI.Threepenny as UI
 
 -- * SearchBar * --

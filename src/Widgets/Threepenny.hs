@@ -1,21 +1,21 @@
 module Widgets.Threepenny (
-  module Widgets.Threepenny.Cast,
-  module Widgets.Threepenny.Core,
-  module Widgets.Threepenny.Links,
-  module Widgets.Threepenny.MinMax,
-  module Widgets.Threepenny.MonoSelect,
-  module Widgets.Threepenny.MultiSelect,
-  module Widgets.Threepenny.Obscura,
-  module Widgets.Threepenny.Ranger,
-  module Widgets.Threepenny.SearchBar
+  module Widgets.Cast,
+  module Widgets.Core,
+  module Widgets.Links,
+  module Widgets.MinMax,
+  module Widgets.MonoSelect,
+  module Widgets.MultiSelect,
+  module Widgets.Obscura,
+  module Widgets.Ranger,
+  module Widgets.SearchBar
   ) where
 
-import qualified Widgets.Cast as Widgets.Threepenny.Cast
-import qualified Widgets.Core as Widgets.Threepenny.Core
-import qualified Widgets.Links as Widgets.Threepenny.Links
-import qualified Widgets.MinMax as Widgets.Threepenny.MinMax
-import qualified Widgets.MonoSelect as Widgets.Threepenny.MonoSelect
-import qualified Widgets.MultiSelect as Widgets.Threepenny.MultiSelect
-import qualified Widgets.Obscura as Widgets.Threepenny.Obscura
-import qualified Widgets.Ranger as Widgets.Threepenny.Ranger
-import qualified Widgets.SearchBar as Widgets.Threepenny.SearchBar
+import qualified Widgets.Threepenny.Cast as Widgets.Cast
+import qualified Widgets.Threepenny.Core as Widgets.Core
+import qualified Widgets.Threepenny.Links as Widgets.Links
+import qualified Widgets.Threepenny.MinMax as Widgets.MinMax
+import qualified Widgets.Threepenny.MonoSelect as Widgets.MonoSelect
+import qualified Widgets.Threepenny.MultiSelect as Widgets.MultiSelect
+import qualified Widgets.Threepenny.Obscura as Widgets.Obscura
+import qualified Widgets.Threepenny.Ranger as Widgets.Ranger
+import qualified Widgets.Threepenny.SearchBar as Widgets.SearchBar

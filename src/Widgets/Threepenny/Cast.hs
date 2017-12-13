@@ -1,12 +1,12 @@
 {-# LANGUAGE RecordWildCards, RecursiveDo #-}
 
-module Widgets.Cast where
+module Widgets.Threepenny.Cast where
 
-import Widgets.Core
-import Widgets.Links
-import Widgets.Obscura
-import Widgets.Ranger
-import Widgets.Core.Helper
+import Widgets.Threepenny.Core
+import Widgets.Threepenny.Links
+import Widgets.Threepenny.Obscura
+import Widgets.Threepenny.Ranger
+import Widgets.Threepenny.Core.Helper
 import Util
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
