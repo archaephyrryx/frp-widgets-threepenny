@@ -1,8 +1,8 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module App.Widgets.SearchBar where
+module Widgets.SearchBar where
 
-import App.Widgets.Core
+import Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
 
 -- * SearchBar * --
@@ -10,22 +10,22 @@ import qualified Graphics.UI.Threepenny as UI
 data SearchBar a = SearchBar
     { _elementSB :: Element
     , _searchsSB :: Tidings String
-    , _matchesSB :: Tidings ([a])
+    , _matchesSB :: Tidings [a]
     }
 
 instance Widget (SearchBar a) where getElement = _elementSB
 
-userSearch :: SearchBar a -> Tidings (String)
+userSearch :: SearchBar a -> Tidings String
 userSearch = _searchsSB
 
-searchMatches :: SearchBar a -> Tidings ([a])
+searchMatches :: SearchBar a -> Tidings [a]
 searchMatches = _matchesSB
 
 searchBar :: (Ord a, Indexable a, Typeable a)
-    => Behavior (IxSet a)         -- ^ list of items
-    -> Behavior String            -- ^ partial search
-    -> Behavior (a -> UI Element) -- ^ display for an item
-    -> UI (SearchBar a)
+          => Behavior (IxSet a)         -- ^ list of items
+          -> Behavior String            -- ^ partial search
+          -> Behavior (a -> UI Element) -- ^ display for an item
+          -> UI (SearchBar a)
 searchBar reftab pstr rdisplay = do
     sbar <- UI.input
     sres <- UI.ul
@@ -33,8 +33,8 @@ searchBar reftab pstr rdisplay = do
     let
         doSearch rt ps = toList (rt @+ wds)
             where
-              wds :: [Nameword]
-              wds = map ravel . words $ ps
+              wds :: [String]
+              wds = words ps
 
     element sbar # set UI.type_ "search"
     element sbar # set (attr "placeholder") "Search"
@@ -52,5 +52,5 @@ searchBar reftab pstr rdisplay = do
 
     return SearchBar{..}
 
-qmatches = mkWriteAttr $ \i x -> void $ do
+qmatches = mkWriteAttr $ \i x -> void $
     return x # set children [] #+ map (\i -> UI.li #+ [i]) i

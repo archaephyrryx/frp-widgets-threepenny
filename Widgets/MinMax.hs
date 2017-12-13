@@ -1,7 +1,8 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
-module App.Widgets.MinMax where
+module Widgets.MinMax where
 
-import App.Widgets.Core
+import Data.Wrapped
+import Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON

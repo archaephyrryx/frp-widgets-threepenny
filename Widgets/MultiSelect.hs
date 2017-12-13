@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
-module App.Widgets.MultiSelect where
+module Widgets.MultiSelect where
 
-import App.Widgets.Core
+import Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON

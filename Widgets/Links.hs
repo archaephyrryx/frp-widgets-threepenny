@@ -1,8 +1,7 @@
 {-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
-module App.Widgets.Links where
+module Widgets.Links where
 
-import App.Core
-import App.Widgets.Core
+import Widgets.Core
 
 rclick :: Element -> Event ()
 rclick = silence . domEvent "contextmenu"
@@ -72,7 +71,7 @@ data LiquidLink a = LiquidLink
   , _fluxLL :: Behavior a
   }
 
-instance Widget (LiquidLink a) where getElement = _elementLL 
+instance Widget (LiquidLink a) where getElement = _elementLL
 
 instance LinkLike LiquidLink where
     tideLink ll = let b = (getFlux ll) in tidings b $ b <@ click (getElement ll)

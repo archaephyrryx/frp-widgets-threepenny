@@ -1,12 +1,12 @@
 {-# LANGUAGE RecordWildCards, RecursiveDo #-}
 
-module App.Widgets.Cast where
+module Widgets.Cast where
 
-import App.Widgets.Core
-import App.Widgets.Links
-import App.Widgets.Obscura
-import App.Widgets.Ranger
-import App.Core.Helper
+import Widgets.Core
+import Widgets.Links
+import Widgets.Obscura
+import Widgets.Ranger
+import Widgets.Core.Helper
 import Util
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
@@ -62,7 +62,7 @@ softCast lFull bBiteSize label fRower = do
         bThis <- stepper 0 $ eRanger
 
     softs <- sequence (zipWith (softLink) (map (label) lFull) (values))
-    
+
     let bChunks = chunksOf <$> bBiteSize <*> (pure softs)
         eSofts = (map (rumors.tideLink) softs)
         bSofts = (!!) <$> bChunks <*> bThis
@@ -102,7 +102,7 @@ liquidCast bFull biteSize label fRower = do
         bValues = blTranspose biteSize (-1) ((!!) <$> bChunks <*> bThis)
 
     liquids <- sequence (zipWith liquidLink (replicate biteSize ((.) <$> (pure label) <*> (((.abs).(!!)) <$> bFull))) bValues)
-    
+
     let eLiquids = (map (rumors.tideLink) liquids)
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 
@@ -120,7 +120,7 @@ derangedCask :: Behavior [a] -- ^ Full list
            -> Ranger Int -- ^ External ranger
            -> Behavior (a -> String) -- ^ Label for the liquidlinks
            -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ Row transformer for items
-           -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items 
+           -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items
            -> UI Cask
 derangedCask bFull biteSize range bLabel bRower bCombo = do
     let values = (map fst . zip [0..] <$> bFull)
@@ -139,7 +139,7 @@ derangedCask bFull biteSize range bLabel bRower bCombo = do
         bValues = blTranspose biteSize (-1) ((!!) <$> bChunks <*> bThis)
 
     liquids <- sequence (zipWith liquidLink (replicate biteSize ((.) <$> bLabel <*> (((.abs).(!!)) <$> bFull))) bValues)
-    
+
     let eLiquids = (map (rumors.tideLink) liquids)
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 
@@ -156,7 +156,7 @@ oculus :: Behavior [a] -- ^ Full list
        -> Ranger Int -- ^ External ranger
        -> Behavior (a -> String) -- ^ URL for the obscurae
        -> Behavior (a -> LiquidLink Int -> UI Element) -- ^ Row transformer for items
-       -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items 
+       -> Behavior ([UI Element] -> [UI Element]) -- ^ Row combiner for items
        -> UI (Cask, [LiquidLink Int])
 oculus bFull biteSize range bLinker bRower bCombo = do
     let values = (map fst . zip [0..] <$> bFull)
@@ -175,7 +175,7 @@ oculus bFull biteSize range bLinker bRower bCombo = do
         bValues = blTranspose biteSize (-1) ((!!) <$> bChunks <*> bThis)
 
     liquids <- sequence (zipWith obscura (replicate biteSize ((.) <$> bLinker <*> (((.abs).(!!)) <$> bFull))) bValues)
-    
+
     let eLiquids = (map (rumors.tideLink) liquids)
         eActua = head <$> unions (eLiquids++[ (-1) <$ eRanger])
 

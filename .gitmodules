@@ -1,0 +1,3 @@
+[submodule "futility"]
+	path = futility
+	url = git@github.com:archaephyrryx/futility.git

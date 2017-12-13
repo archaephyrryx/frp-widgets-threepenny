@@ -1,0 +1,9 @@
+flags: {}
+extra-package-dbs: []
+packages:
+- .
+- futility
+extra-deps:
+- ixset-1.0.7
+- syb-with-class-0.6.1.8
+resolver: lts-9.18

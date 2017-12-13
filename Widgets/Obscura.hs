@@ -1,9 +1,9 @@
 {-# LANGUAGE RecursiveDo, RecordWildCards #-}
 
-module App.Widgets.Obscura where
+module Widgets.Obscura where
 
-import App.Widgets.Core
-import App.Widgets.Links
+import Widgets.Core
+import Widgets.Links
 import qualified Graphics.UI.Threepenny as UI
 import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON

@@ -1,8 +1,8 @@
 {-# LANGUAGE RecordWildCards, RecursiveDo #-}
 
-module App.Widgets.Ranger where
+module Widgets.Ranger where
 
-import App.Widgets.Core
+import Widgets.Core
 import qualified Graphics.UI.Threepenny as UI
 
 -- | A 'Ranger', which consists of an incrementor and decrementor for a
@@ -31,8 +31,8 @@ ranger bloc bzer bmax bdisplay = do
     next <- UI.button #. "ranger-but next" # settext ">"
     box <- UI.span #+ [element prev, element cur, element next]
 
-    let bNotFirst = (>) <$> bloc <*> bzer 
-        bNotLast  = (<) <$> bloc <*> bmax 
+    let bNotFirst = (>) <$> bloc <*> bzer
+        bNotLast  = (<) <$> bloc <*> bmax
 
     element prev # sink UI.enabled bNotFirst
     element cur # sink curview ((.(:[])).map <$> bdisplay <*> bloc)
@@ -45,7 +45,7 @@ ranger bloc bzer bmax bdisplay = do
             [ pred <$ whenE bNotFirst ePrev
             , succ <$ whenE bNotLast  eNext
             ])
-        
+
         _currentRG = tidings bloc eChange
         _elementRG   = box
     return Ranger{..}
