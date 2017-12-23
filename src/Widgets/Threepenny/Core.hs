@@ -1,10 +1,11 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-} --, NoMonomorphismRestriction #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Widgets.Threepenny.Core
         ( kinder
         , mapkinder
         , silence
         , mouseKey
         , unsafeMapUI
+        , clickValueChange
         , module Widgets.Threepenny.Core.UI
         , module Widgets.Threepenny.Core.FRP
         , module Graphics.UI.Threepenny.Core
@@ -48,23 +49,26 @@ import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
 
 silence :: Functor f => f a -> f ()
-silence = fmap (const ())
+silence = void
 
 unsafeMapUI el f = unsafeMapIO (\a -> getWindow el >>= \w -> runUI w (f a))
 
 -- | Attribute generator with highly general type polymorphism
 kinder :: (a -> [UI Element]) -> WriteAttr Element a
-kinder f = mkWriteAttr $ \i x -> void $ do
-    return x # set children [] #+ (f i)
+kinder f = mkWriteAttr $ \i x -> void $
+  return x # set children [] #+ f i
 
 -- | Attribute generator for display functions that are mapping in
 -- nature
 mapkinder :: (a -> UI Element) -> WriteAttr Element [a]
-mapkinder f = mkWriteAttr $ \i x -> void $ do
-    return x # set children [] #+ (map f i)
+mapkinder f = mkWriteAttr $ \i x -> void $
+  return x # set children [] #+ map f i
 
 -- | An event representing either a 'keydown' event or a 'click' event,
 -- for widgets that can change values through either action; in the case
 -- of keydown, the value is recorded
 mouseKey :: Element -> Event (Maybe KeyCode) -- ^ (Maybe a) is isomorphic to (Either () a), and it is simpler
 mouseKey el = head <$> unions [ Nothing <$ click el, Just <$> keydown el ]
+
+clickValueChange :: Element -> Event String
+clickValueChange el = unsafeMapUI el (const $ get value el) (mouseKey el)

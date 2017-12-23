@@ -9,9 +9,6 @@ import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
 
-clickValueChange :: Element -> Event String
-clickValueChange el = unsafeMapUI el (const $ get value el) (mouseKey el)
-
 -- * Min and Max * --
 -- |A "minimum value" numeric input field
 data Min a = Min
