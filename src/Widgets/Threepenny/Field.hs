@@ -17,16 +17,32 @@ data Field a = Field
   , _currentFL :: Tidings (Maybe a)
   }
 
-legibleField :: (Read a, Show a)
-             => Behavior (Maybe a)
-             -> UI (Field a)
-legibleField bVal = do
+legibleField' :: (a -> String)
+              -> (String -> Maybe a)
+              -> Behavior (Maybe a)
+              -> UI (Field a)
+legibleField' sh re bVal = do
     fld <- input # set (attr "type") "text"
-    element fld # sink value ((show?/) <$> bVal)
+    element fld # sink value ((sh?/) <$> bVal)
 
-    let _currentFL = tidings bVal $ readMaybe <$> valueChange fld
+    let _currentFL = tidings bVal $ re <$> valueChange fld
         _elementFL = fld
     return Field{..}
+
+listField :: Behavior [String] -> UI (Field [String])
+listField bXs = do
+    fld <- input # set (attr "type") "text"
+    element fld # sink value (intercalate ", " <$> bXs)
+
+    let _currentFL = tidings (pure <$> bXs) $ pure . splitOn ", " <$> valueChange fld
+        _elementFL = fld
+    return Field {..}
+
+legibleField :: (Read a, Show a) => Behavior (Maybe a) -> UI (Field a)
+legibleField = legibleField' show read
+
+abbrevField :: Abbrev a => Behavior (Maybe a) -> UI (Field a)
+abbrevField = legibleField' brief (readMaybe/>|/short)
 
 hintField :: Hint a
           => Behavior (Maybe a) -- ^ Optional minimum value
