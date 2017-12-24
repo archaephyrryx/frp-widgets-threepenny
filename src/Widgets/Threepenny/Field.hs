@@ -8,6 +8,7 @@ import qualified Control.Monad.Trans.RWS.Lazy as Monad
 import qualified Data.Aeson as JSON
 import qualified Data.Map as Map
 import qualified Data.Vector as V
+import Data.List.Split (splitOn)
 import Util
 
 -- * Field * --
@@ -41,7 +42,7 @@ listField bXs = do
 legibleField :: (Read a, Show a) => Behavior (Maybe a) -> UI (Field a)
 legibleField = legibleField' show read
 
-abbrevField :: Abbrev a => Behavior (Maybe a) -> UI (Field a)
+abbrevField :: (Read a, Abbrev a) => Behavior (Maybe a) -> UI (Field a)
 abbrevField = legibleField' brief (readMaybe/>|/short)
 
 hintField :: Hint a
