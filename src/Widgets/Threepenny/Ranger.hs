@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, RecursiveDo #-}
+{-# LANGUAGE RecordWildCards, MultiParamTypeClasses, FlexibleInstances #-}
 
 module Widgets.Threepenny.Ranger where
 
@@ -14,6 +14,7 @@ data Ranger a = Ranger
   }
 
 instance Widget (Ranger a) where getElement = _elementRG
+instance Courier (Ranger a) a where tide = _currentRG
 
 userLoc :: Ranger a -> Tidings a
 userLoc = _currentRG
@@ -41,7 +42,7 @@ ranger bloc bzer bmax bdisplay = do
     let bLocApp = (#) <$> bloc
         ePrev = click prev
         eNext = click next
-        eChange = head <$> unions (map (apply bLocApp) $
+        eChange = head <$> unions (map (apply bLocApp)
             [ pred <$ whenE bNotFirst ePrev
             , succ <$ whenE bNotLast  eNext
             ])
@@ -50,5 +51,5 @@ ranger bloc bzer bmax bdisplay = do
         _elementRG   = box
     return Ranger{..}
 
-curview = mkWriteAttr $ \i x -> void $ do
+curview = mkWriteAttr $ \i x -> void $
     return x # set children [] #+ map (\i -> UI.span #+ [i]) i

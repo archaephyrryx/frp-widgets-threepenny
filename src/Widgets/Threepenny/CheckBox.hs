@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards        #-}
+{-# LANGUAGE RecordWildCards, MultiParamTypeClasses #-}
 module Widgets.Threepenny.CheckBox where
 
 import Widgets.Threepenny.Core
@@ -11,6 +11,8 @@ data CheckBox = CheckBox { _elementCB :: Element
 
 instance Widget CheckBox where
   getElement = _elementCB
+instance Courier CheckBox Bool where
+  tide = _checkedCB
 
 checkbox :: Behavior Bool -> UI CheckBox
 checkbox bc  = do

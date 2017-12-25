@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, MultiParamTypeClasses #-}
 module Widgets.Threepenny.MultiSelect where
 
 import Widgets.Threepenny.Core
@@ -17,6 +17,9 @@ data MultiSelect a = MultiSelect
     }
 
 instance Widget (MultiSelect a) where getElement = _elementMS
+
+instance Courier (MultiSelect a) [a] where
+  tide = _selectionMS
 
 -- | User changes to the current selection (possibly empty).
 userSelections :: MultiSelect a -> Tidings [a]

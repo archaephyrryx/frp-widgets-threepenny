@@ -33,6 +33,8 @@ data Counter a = Counter
 
 instance Widget (Counter a) where
   getElement =  getElement . _ctrlCTR
+instance Courier (Counter a) a where
+  tide = _valCTR
 
 incre :: UI FullControl
 incre = Incrementor <$> UI.button # set text "+"

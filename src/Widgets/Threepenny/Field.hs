@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, MultiParamTypeClasses #-}
 module Widgets.Threepenny.Field where
 
 import Text.Read (readMaybe)
@@ -17,6 +17,11 @@ data Field a = Field
   { _elementFL :: Element
   , _currentFL :: Tidings (Maybe a)
   }
+
+instance Widget (Field a) where
+  getElement =  _elementFL
+instance Courier (Field a) (Maybe a) where
+  tide = _currentFL
 
 legibleField' :: (a -> String)
               -> (String -> Maybe a)

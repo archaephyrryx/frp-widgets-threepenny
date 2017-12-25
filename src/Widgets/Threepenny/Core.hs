@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses, FunctionalDependencies, GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module Widgets.Threepenny.Core
         ( kinder
@@ -6,6 +7,7 @@ module Widgets.Threepenny.Core
         , mouseKey
         , unsafeMapUI
         , clickValueChange
+        , Courier(..)
         , module Widgets.Threepenny.Core.UI
         , module Widgets.Threepenny.Core.FRP
         , module Graphics.UI.Threepenny.Core
@@ -47,6 +49,17 @@ import Graphics.UI.Threepenny.Events
 import Graphics.UI.Threepenny hiding (size, map, delete, empty)
 import Graphics.UI.Threepenny.Widgets
 import Reactive.Threepenny hiding (empty)
+
+-- | Courier - a bearer of tidings
+-- Courier types are wrappers for bundling UI elements with their reactive components
+class Courier c t | c -> t where
+  tide :: c -> Tidings t
+  tide = tidings <$> omens <*> portents
+  -- Optional declarations
+  omens :: c -> Behavior t
+  omens = facts . tide
+  portents :: c -> Event t
+  portents = rumors . tide
 
 silence :: Functor f => f a -> f ()
 silence = void

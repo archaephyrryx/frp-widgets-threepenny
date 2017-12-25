@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, MultiParamTypeClasses #-}
 module Widgets.Threepenny.MinMax where
 
 import Data.Wrapped
@@ -25,6 +25,9 @@ data Max a = Max
 instance Widget (Min a) where getElement = _elementMN
 instance Widget (Max a) where getElement = _elementMX
 
+instance Courier (Min a) (Maybe a) where tide = _nuMN
+instance Courier (Max a) (Maybe a) where tide = _nuMX
+
 -- | User changes to the current values (possibly empty).
 userMin :: Min a -> Tidings (Maybe a)
 userMin = _nuMN
@@ -41,9 +44,9 @@ minmax bmin bmax bdisplay = do
     maxi <-  UI.input # set (attr "type") "number" # set (attr "step") "1" # set (attr "placeholder") "Max" # set (attr "min") "0"
 
     -- animate output items
-    element mini  # sink value ((maybe ("")) <$> bdisplay <*> bmin)
-    element maxi  # sink (attr "min") ((maybe ("0")) <$> bdisplay <*> bmin)
-    element maxi  # sink value ((maybe ("")) <$> bdisplay <*> bmax)
+    element mini  # sink value (maybe "" <$> bdisplay <*> bmin)
+    element maxi  # sink (attr "min") (maybe "0" <$> bdisplay <*> bmin)
+    element maxi  # sink value (maybe "" <$> bdisplay <*> bmax)
 
     let _nuMN = tidings bmin $ readMaybeH <$> clickValueChange mini
         _elementMN   = mini

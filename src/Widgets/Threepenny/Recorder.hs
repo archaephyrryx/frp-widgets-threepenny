@@ -21,6 +21,8 @@ data Recorder = Recorder { _elementRE :: Element
 
 instance Widget Recorder where
   getElement = _elementRE
+instance Courier Recorder String where
+  tide = _fileioRE
 
 
 recorder :: Behavior String -- ^ String value to be saved/loaded

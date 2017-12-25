@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, RecursiveDo #-}
+{-# LANGUAGE RecordWildCards, RecursiveDo, MultiParamTypeClasses #-}
 
 module Widgets.Threepenny.Cast where
 
@@ -32,6 +32,9 @@ instance Widget Cask where
     getElement = _elementCK
 instance Cast Cask where
     userActive = _actuateCK
+
+instance Courier Case Int where tide = _actuateCE
+instance Courier Cask Int where tide = _actuateCK
 
 blTranspose :: Int -> a -> Behavior [a] -> [Behavior a]
 blTranspose n z bxs = map (\x -> (!!x) <$> (take n . (++(repeat z)) <$> bxs)) (enumFromTo 0 (n-1))

@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards, ScopedTypeVariables #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, MultiParamTypeClasses, FlexibleInstances #-}
 module Widgets.Threepenny.Links where
 
 import Widgets.Threepenny.Core
@@ -18,6 +18,8 @@ class LinkLike w where
     tideLink :: w a -> Tidings a -- ^ Tidings for normal clicks
     ebbLink :: w a -> Tidings a -- ^ Tidings for right-clicks
 
+instance (LinkLike w) => Courier (w a) a where
+  tide = tideLink
 
 -- * SoftLink * --
 -- |A hybrid Link/Button, which can be made into either with CSS rules.

@@ -1,4 +1,4 @@
-{-# LANGUAGE RecordWildCards        #-}
+{-# LANGUAGE RecordWildCards, MultiParamTypeClasses, FlexibleInstances #-}
 module Widgets.Threepenny.Radio where
 
 import Widgets.Threepenny.Links
@@ -12,6 +12,10 @@ data Radio a = Radio { _elementRD :: Element
 
 instance Widget (Radio a) where
   getElement = _elementRD
+instance Courier (Radio a) a where
+  tide = _tuningsRD
+  omens = facts . _tuningsRD
+  portents = rumors . _tuningsRD
 
 radio :: Eq a => [a] -> Behavior a -> (a -> String) -> UI (Radio a)
 radio xs bx sf = do
