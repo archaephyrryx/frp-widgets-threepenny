@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f7de872267ef3a948b835c8655217394a16c38ac675276f7ef13f8356c1bd5c4
+-- hash: c0360e9f2f7322eda89c557fff3aaffdb1181d9ed8ba92cd74945fa037ed7de3
 
 name:                frp-widgets-threepenny
 version:             0.1.0.0
@@ -41,6 +41,7 @@ library
   exposed-modules:
       Widgets.Threepenny
       Widgets.Threepenny.Cast
+      Widgets.Threepenny.CheckBox
       Widgets.Threepenny.Core
       Widgets.Threepenny.Core.FRP
       Widgets.Threepenny.Core.UI
